@@ -3,6 +3,7 @@ Created on Dec 9, 2015
 
 @author: shaibujnr
 '''
+
 from kivy.app import App
 from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
@@ -148,6 +149,27 @@ class InputGrid(GridLayout):
                 if child.index == (x,y):
                     child.focus = True
                     child.select_all()
+                    
+    def refill(self):
+        self.rows = int(self.rows_details_input.text)
+        self.cols = int(self.cols_details_input.text)
+        self.height = (
+                       (self.ti.height * self.rows)
+                       + 
+                       (self.padding[1]*4)
+                       +
+                       (self.spacing[1]*(self.rows-1))
+                       )
+        
+        self.width = (
+                      (self.ti.width*self.cols)
+                      + 
+                      (self.padding[0]*2)
+                      +
+                      (self.spacing[0]*(self.cols-1))
+                      )
+
+        self.fill()
 
     def on_enter(self,instance):
         """

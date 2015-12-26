@@ -3,7 +3,6 @@ Created on Dec 5, 2015
 
 @author: shaibujnr
 '''
-
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -12,6 +11,7 @@ from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 
 
 
@@ -38,9 +38,6 @@ class root(ScreenManager):
 class MatApp(App):
     def build(self):
         return root()
-    
-    def on_pause(self):
-        return True
     
 if __name__ == "__main__":
     MatApp().run()

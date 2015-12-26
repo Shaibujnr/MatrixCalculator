@@ -2,7 +2,6 @@
     on_text_validate: app.root.input_screen.input_grid.on_enter(self)
     
     
-    
 <DetailsInput>:
     font_size: self.height/2
     padding_y: (self.height-self.font_size)/2
@@ -32,7 +31,6 @@
                     text: "5"
                     size_hint: 4,1
                     foreground_color: .4,.4,.5,1
-                    height: inputbox.height
                     on_text_validate: inputgrid.validate(called_from="rows")
                 
                 
@@ -44,8 +42,13 @@
                     size_hint: 4,1
                     text: "5"
                     foreground_color: .4,.4,.5,1
-                    height: inputbox.height
                     on_text_validate: inputgrid.validate(called_from="cols")
+                Button:
+                    id: fill_button
+                    size_hint: 1.5,1
+                    text: "FILL"
+                    on_press: inputgrid.refill()
+                    
             BoxLayout:
                 id: dropdown_box
                 orientation: "horizontal"
