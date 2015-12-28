@@ -15,12 +15,14 @@ from kivy.clock import Clock
 
 
 
-from classes.operations_class.ops import *
-from classes.input_matrix_class.input_matrix import *
+from screens.Operations import OperationScreen
+from screens.input_matrix import InputScreen
+from screens.Determinant import DeterminantScreen
+from screens.Adjoint import AdjointScreen
 
 
-Builder.load_file("screens/operations.kv") #load operations.kv for the operations screen
-Builder.load_file("screens/input_matrix.kv")#load input_matrix.kv for the input screen
+
+
 
 
 
@@ -31,7 +33,6 @@ class root(ScreenManager):
     *ScreenManager to manage transition between each screen
     *input_screen holds the InputScreen object defined in input_matrix.py
     """
-    input_screen = ObjectProperty() 
 
 
 

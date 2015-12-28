@@ -30,7 +30,8 @@ class OperationDrop(DropDown):
                         "Subtraction",
                         "Adjoint",
                         "Cofactors",
-                        "Scalar Multiplication"
+                        "Scalar Multiplication",
+                        "Input Matrix"
                         ]
         for tags in self.buttons:
             self.add_widget(OperationButton(text=tags,height=self.button_height))

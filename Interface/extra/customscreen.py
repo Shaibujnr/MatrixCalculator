@@ -1,5 +1,5 @@
 '''
-Created on Dec 9, 2015
+Created on Dec 27, 2015
 
 @author: shaibujnr
 '''
@@ -12,8 +12,96 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
 from kivy.properties import ObjectProperty,NumericProperty
 from kivy.lang import Builder
-from extra.operation_drop import OperationDrop
-from extra.type_drop import TypeDrop
+from operation_drop import OperationDrop
+from type_drop import TypeDrop
+
+from functools import partial
+Builder.load_string("""
+    
+    
+<DetailsInput>:
+    font_size: self.height/2
+    padding_y: (self.height-self.font_size)/2
+    foreground_color: .4,.4,.5,1
+
+<CustomScreen>:
+    id: custom_screen
+    input_grid: inputgrid
+    op_button: op_button
+    type_button: type_button
+    BoxLayout:
+        orientation: "vertical"
+        padding: root.width/100
+        BoxLayout:
+            id: var_box
+            orientation: "vertical"
+            size_hint: 1,1
+            spacing: self.height/10
+            padding: self.width/40,0
+            BoxLayout:
+                id: inputbox
+                orientation: "horizontal"
+                spacing: "20dp"
+                Label:
+                    text: "rows:"
+                    size_hint: 1,1
+                DetailsInput:
+                    id: rows_input
+                    text: "5"
+                    size_hint: 4,1
+                    foreground_color: .4,.4,.5,1
+                    on_text_validate: inputgrid.validate(called_from="rows")
+                
+                
+                Label:
+                    text: "cols:"
+                    size_hint: 1,1
+                DetailsInput:
+                    id: cols_input
+                    size_hint: 4,1
+                    text: "5"
+                    foreground_color: .4,.4,.5,1
+                    on_text_validate: inputgrid.validate(called_from="cols")
+                Button:
+                    id: fill_button
+                    size_hint: 1.5,1
+                    text: "FILL"
+                    on_press: inputgrid.refill()
+                    
+            BoxLayout:
+                id: dropdown_box
+                orientation: "horizontal"
+                spacing: self.width/100
+                Button:
+                    id: op_button
+                    text: "Input Matrix"
+                    on_release: root.op_drop.open(self)
+                Button:
+                    id: type_button
+                    text: "Ordinary Matrix"
+                    on_release: root.type_drop.open(self)
+                
+                
+                
+        BoxLayout: 
+            id: grid_box
+            size_hint: 1,9
+            ScrollView:
+                size_hint: None,None
+                size: grid_box.size
+                InputGrid:
+                    id: inputgrid
+                    containing_screen: custom_screen
+                    cols_details_input: cols_input
+                    rows_details_input: rows_input
+                    
+                    
+
+                    
+""")
+
+
+
 
 
 
@@ -77,6 +165,8 @@ class FloatInput(TextInput):
         when the text in the textinput is edited
         """
         self.foreground_color = (0,0,0,1)
+        
+
 
 
 
@@ -132,10 +222,15 @@ class InputGrid(GridLayout):
                                 FloatInput(
                                            index=(row,col),
                                            height = self.height/20,
-                                           width = self.width/30
+                                           width = self.width/30,
                                            ),
                                 index=(row,col)
                                 )
+        for child in self.children:
+            child.bind(on_text_validate=partial(self.on_enter,(child.index)))
+            
+
+
     
     def validate(self,called_from):
         if called_from == "rows":
@@ -143,12 +238,7 @@ class InputGrid(GridLayout):
             self.cols_details_input.select_all()
             
         else:
-            x = self.rows-1
-            y = self.cols-1
-            for child in self.children:
-                if child.index == (x,y):
-                    child.focus = True
-                    child.select_all()
+            self.refill()
                     
     def refill(self):
         self.rows = int(self.rows_details_input.text)
@@ -171,7 +261,7 @@ class InputGrid(GridLayout):
 
         self.fill()
 
-    def on_enter(self,instance):
+    def on_enter(self,index,*argss):
         """
         *in the initialisation method, multiline is set to False
         * this prevents the cursor from spanning more than a line and
@@ -181,7 +271,7 @@ class InputGrid(GridLayout):
         *this method moves the focus to the next floatinput and 
         selects all the texts in the floatinput.
         """
-        x,y= instance.index #index of the floatinput(instance) that calls the method
+        x,y= index#index of the floatinput(instance) that calls the method
         
         if  x!=0 and y == 0:
             """
@@ -220,14 +310,14 @@ class DetailsInput(FloatInput):
 
 
         
-class InputScreen(Screen):
+class CustomScreen(Screen):
     input_grid = ObjectProperty() #holds the InputGrid object
     op_button = ObjectProperty()
     type_button = ObjectProperty()
     type_drop = ObjectProperty(TypeDrop(max_height=400))
     op_drop = ObjectProperty(OperationDrop(max_height=300))
     def __init__(self,*args,**kwargs):
-        super(InputScreen,self).__init__(**kwargs)
+        super(CustomScreen,self).__init__(**kwargs)
         
         
         
@@ -241,13 +331,9 @@ class InputScreen(Screen):
             
 
 #-------------------------------------------------------------------------------
-class InputGridApp(App):
+class CustomScreenApp(App):
     def build(self):
         return InputGrid()
     
 if __name__ == "__main__":
-    InputGridApp().run()
-
-
-
-
+    CustomScreenApp().run()

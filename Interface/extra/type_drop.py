@@ -27,6 +27,7 @@ class TypeDrop(DropDown):
                         "Singular Matrix",
                         "Zero Matrix",
                         "Triangular Matrix",
+                        "Ordinary Matrix",
                         ]
         for tags in self.buttons:
             self.add_widget(TypeButton(text=tags,height=self.button_height))
