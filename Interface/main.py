@@ -14,11 +14,12 @@ from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 
 
-
 from screens.Operations import OperationScreen
 from screens.input_matrix import InputScreen
 from screens.Determinant import DeterminantScreen
 from screens.Adjoint import AdjointScreen
+from screens.Cofactors import CofactorsScreen
+from screens.Transpose import TransposeScreen
 
 
 

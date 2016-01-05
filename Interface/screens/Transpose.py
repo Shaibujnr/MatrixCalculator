@@ -1,12 +1,12 @@
 '''
-Created on Dec 27, 2015
+Created on Jan 2, 2016
 
 @author: shaibujnr
 '''
 from Interface.extra.customscreen import CustomScreen
 
-class DeterminantScreen(CustomScreen):
+class TransposeScreen(CustomScreen):
     def __init__(self,*args,**kwargs):
-        super(DeterminantScreen,self).__init__(**kwargs)
-        self.op_button_text = "Determinant"
+        super(TransposeScreen,self).__init__(**kwargs)
+        self.op_button_text = "Transpose"
         self.type_button_text = "Square Matrix"

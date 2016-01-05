@@ -8,6 +8,9 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
+from kivy.properties import ObjectProperty
+
+from functools import partial
 
 Builder.load_string("""
 <OperationButton>:
@@ -26,8 +29,37 @@ Builder.load_string("""
         height: root.height
         OperationGrid:
             size_hint: None,None
+            cols: 4
+            rows: 3
+            height: ((self.rows*r_button.height)+(self.spacing[1]*(self.rows-1))+(self.padding[1]*2))
             width: root.width
-            on_touch_down: print self.height,sv.height
+            OperationButton:
+                id: r_button
+                text: "Input Matrix"
+                on_press: root.sm.current = "input_matrix_screen"
+            OperationButton:
+                text: "Determinant"
+                on_press: root.sm.current = "determinant_screen"
+            OperationButton:
+                text: "Inverse"
+            OperationButton:
+                text: "Addition"
+            OperationButton:
+                text: "Subtraction"
+            OperationButton:
+                text: "Multiplication"
+            OperationButton:
+                text: "Cofactors"
+                on_press: root.sm.current = "cofactors_screen"
+            OperationButton:
+                text: "Adjoint"
+                on_press: root.sm.current = "adjoint_screen"
+            OperationButton:
+                text: "Transpose"
+                on_press: root.sm.current = "transpose_screen"
+            OperationButton:
+                text: "Scalar Multiplication"
+
 
 """)
 class OperationButton(Button):
@@ -36,40 +68,13 @@ class OperationButton(Button):
 class OperationGrid(GridLayout):
     def __init__(self,*args,**kwargs):
         super(OperationGrid,self).__init__(**kwargs)
-        self.cols =  4
-        self.size_hint = None,None
-        self.ref_button = OperationButton()
-        self.height = 0
-        self.texts = [
-                      "Input Matrix",
-                      "Determinant",
-                      "Adjoint",
-                      "Inverse",
-                      "Cofactors",
-                      "Addition",
-                      "Subtraction",
-                      "Multiplication",
-                      "Transpose",
-                      "Scalar\nMultiplication"
-                      ]
-        if int(len(self.texts))%self.cols == 0:
-            self.rows = int(len(self.texts))
-        else:
-            self.rows = int(len(self.texts))+1
-        self.fill()
-        self.height += self.padding[1]*2
-        self.height += (self.spacing[1] * (self.rows-1))
-        self.height += self.ref_button.height * self.rows
         
-    def fill(self):
-        for operations in self.texts:
-            self.add_widget(
-                            OperationButton(
-                                            text=operations,
-                                            
-                                            )
-                            )
-            
 
 class OperationScreen(Screen):
-    pass
+    """
+    OperationButton instance needs access to the app root(screenmanager) in order
+    to switch screens between operations. The 'sm' variable holds the screenmanager
+    object allowing the button to call the screenmanager by 'root.sm' in the above 
+    kv string.
+    """
+    sm = ObjectProperty() 

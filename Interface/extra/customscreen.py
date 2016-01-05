@@ -10,12 +10,13 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
-from kivy.properties import ObjectProperty,NumericProperty
+from kivy.properties import ObjectProperty,NumericProperty,StringProperty
 from kivy.lang import Builder
 from operation_drop import OperationDrop
 from type_drop import TypeDrop
 
 from functools import partial
+from threading import Thread
 Builder.load_string("""
     
     
@@ -74,11 +75,11 @@ Builder.load_string("""
                 spacing: self.width/100
                 Button:
                     id: op_button
-                    text: "Input Matrix"
+                    text: root.op_button_text
                     on_release: root.op_drop.open(self)
                 Button:
                     id: type_button
-                    text: "Ordinary Matrix"
+                    text: root.type_button_text
                     on_release: root.type_drop.open(self)
                 
                 
@@ -99,8 +100,6 @@ Builder.load_string("""
 
                     
 """)
-
-
 
 
 
@@ -316,6 +315,14 @@ class CustomScreen(Screen):
     type_button = ObjectProperty()
     type_drop = ObjectProperty(TypeDrop(max_height=400))
     op_drop = ObjectProperty(OperationDrop(max_height=300))
+    """
+    the operation dropdown main button and the type dropdown main button now
+    update their text from the screen op_button_text and type_button_text respectively
+    Now the text can be changed from subclasses by using the self.op***
+    """
+    op_button_text = StringProperty("Input Matrix")
+    type_button_text = StringProperty("Square Matrix")
+    
     def __init__(self,*args,**kwargs):
         super(CustomScreen,self).__init__(**kwargs)
         
